@@ -1,90 +1,86 @@
-import java.util.Random;
 import java.util.Scanner;
 
-class Guesser{
-Scanner sc=new Scanner(System.in);
-    public int gessNum()
-    {
-//       Random random=new Random();
+// Base class for players
+class Player {
+    Scanner sc = new Scanner(System.in);
+
+    public int guessNumber() {
+        System.out.println("Player guess the number ");
+        return sc.nextInt();
+    }
+}
+
+// Derived classes for individual players
+class Player1 extends Player {
+}
+
+class Player2 extends Player {
+}
+
+class Player3 extends Player {
+}
+
+// Interface for Guesser
+interface GuesserInterface {
+    int guessNumber();
+}
+
+// Guesser class implementing GuesserInterface
+class Guesser implements GuesserInterface {
+    Scanner sc = new Scanner(System.in);
+
+    @Override
+    public int guessNumber() {
         System.out.println("Guesser guess the number ");
-        int n=sc.nextInt();
-        return n;
+        return sc.nextInt();
     }
 }
-class Player{
-//  Random random=new Random();
-Scanner sc=new Scanner(System.in);
-    public int guessP1() {
-        System.out.println("Player 1 guess the number ");
-    int p1=sc.nextInt();
-    return p1;
+
+class Umpire {
+    int guesserNum;
+    Player1 p1;
+    Player2 p2;
+    Player3 p3;
+
+    public void collectFromGuesser(GuesserInterface guesser) {
+        guesserNum = guesser.guessNumber();
     }
 
-    public int guessP2() {
-        System.out.println("Player 2 guess the number ");
-        int p2=sc.nextInt();
-        return p2;
+    public void collectFromPlayers(Player p1, Player p2, Player p3) {
+        this.p1 = (Player1) p1;
+        this.p2 = (Player2) p2;
+        this.p3 = (Player3) p3;
     }
 
-    public int guessP3() {
-        System.out.println("Player 3 guess the number ");
-        int p3=sc.nextInt();
-        return p3;
-    }
-}
-class Umpire{
-int guesserNum;
-int P1;
-int P2;
-int P3;
-    public void collectFromGuesser()
-    {
-        Guesser guesser=new Guesser();
-        guesserNum=guesser.gessNum();
+    public void declareResult() {
+        System.out.println("Number guessed by guesser is ->" + guesserNum);
+        int p1Guess = p1.guessNumber();
+        int p2Guess = p2.guessNumber();
+        int p3Guess = p3.guessNumber();
 
+        System.out.println("Number guessed by Player 1 is ->" + p1Guess);
+        System.out.println("Number guessed by Player 2 is ->" + p2Guess);
+        System.out.println("Number guessed by Player 3 is ->" + p3Guess);
 
-    }
-
-    public void collectFromPlayer() {
-        Player player=new Player();
-        P1=player.guessP1();
-        P2=player.guessP2();
-        P3=player.guessP3();
-
-    }
-
-    public void declrResult() {
-        System.out.println("Number guessed by guesser is ->"+guesserNum);
-        System.out.println("Number guessed by Player 1 is ->"+P1);
-        System.out.println("Number guessed by Player 2 is ->"+P2);
-        System.out.println("Number guessed by Player 3 is ->"+P3);
-        if(guesserNum==P1 && guesserNum==P2 && guesserNum==P3){
+        if (guesserNum == p1Guess && guesserNum == p2Guess && guesserNum == p3Guess) {
             System.out.println("All Players won ");
-        }
-       else  if(guesserNum==P1){
-            if(guesserNum==P2){
+        } else if (guesserNum == p1Guess) {
+            if (guesserNum == p2Guess) {
                 System.out.println("Player 1 & 2 won");
-            }
-            else if(guesserNum==P3){
+            } else if (guesserNum == p3Guess) {
                 System.out.println("Player 1 & 3 won");
-            }
-            else{
+            } else {
                 System.out.println("Player 1 won");
             }
-        }
-       else if(guesserNum==P2){
-            if(guesserNum==P3){
+        } else if (guesserNum == p2Guess) {
+            if (guesserNum == p3Guess) {
                 System.out.println("Player 2 & 3 won");
-            }
-            else{
+            } else {
                 System.out.println("Player 2 won");
             }
-        }
-        else if(guesserNum==P3){
-
-                System.out.println("Player 3 won");
-        }
-        else{
+        } else if (guesserNum == p3Guess) {
+            System.out.println("Player 3 won");
+        } else {
             System.out.println("Game lost by every player");
         }
     }
@@ -92,9 +88,14 @@ int P3;
 
 public class GuesserGame {
     public static void main(String[] args) {
-    Umpire obj=new Umpire();
-    obj.collectFromGuesser();
-    obj.collectFromPlayer();
-    obj.declrResult();
+        Umpire umpire = new Umpire();
+        Guesser guesser = new Guesser();
+        Player1 player1 = new Player1();
+        Player2 player2 = new Player2();
+        Player3 player3 = new Player3();
+
+        umpire.collectFromGuesser(guesser);
+        umpire.collectFromPlayers(player1, player2, player3);
+        umpire.declareResult();
     }
 }
